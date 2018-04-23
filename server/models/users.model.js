@@ -7,8 +7,8 @@ const userSchema = new Schema({
     required:[true,'must be filled'],
     unique:[true,'username already exists']
   },
-  password:String,
-  role:String
+  email:String,
+  picture:String,
 })
 
 module.exports = mongoose.model('User',userSchema)

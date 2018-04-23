@@ -3,13 +3,19 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import FBSignInButton from 'vue-facebook-signin-button'
+import store from './store'
+import VueAwesome from 'vue-awesome'
 
+Vue.component('icon', VueAwesome)
+Vue.use(FBSignInButton)
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
   router,
+  store,
   components: { App },
   template: '<App/>'
 })
