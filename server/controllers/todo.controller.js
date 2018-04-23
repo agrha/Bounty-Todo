@@ -3,15 +3,17 @@ const todoSchema = require('../models/todo.model')
 class Todo {
   static create(req,res){
     let obj = {
-      name: req.body.title,
+      name: req.body.name,
       description: req.body.description,
       hutang: req.body.hutang,
-      status: 'not done',
-      image: req.file.cloudStoragePublicUrl
+      status: false,
+      image: req.file.cloudStoragePublicUrl,
+      userId: req.body.userId
     }
     // console.log(obj)
     todoSchema.create(obj)
     .then(data => {
+      console.log(data)
       res.status(200).json({
         message: 'create todo successfully',
         data
@@ -26,11 +28,11 @@ class Todo {
   }
 
   static read(req,res){
-    let target = {
-      userId: req.body.userId
-    }
-    todoSchema.find(target)
+    todoSchema.find({
+      userId: req.params.id
+    })
     .populate('userId')
+    .exec()
     .then(todo => {
       res.status(200).json({
         message:'list of todo:',
@@ -67,7 +69,7 @@ class Todo {
   static complete(req,res){
     todoSchema.findById(req.params.id)
     .then(data => {
-      data.status = done
+      data.status = !data.status
       data.save()
       .then(savedData=>{
         res.status(200).json({

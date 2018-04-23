@@ -1,11 +1,11 @@
 <template>
   <div>
-    <button class="btn btn-outline-success my-2 my-sm-0" data-toggle="modal" data-target="#createArticle"><strong>Create Blog</strong></button>
+    <button class="btn btn-outline-success my-2 my-sm-0" data-toggle="modal" data-target="#createArticle"><strong>Add Hutangers</strong></button>
     <div class="modal fade" id="createArticle" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLongTitle">Create Blog</h5>
+            <h5 class="modal-title" id="exampleModalLongTitle">Add Hutangers</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
@@ -17,22 +17,22 @@
                 <input type="file" class="form-control" id="recipient-name" @change="takePhoto">
               </div>
               <div class="form-group">
-                <label for="recipient-name" class="col-form-label">Title</label>
-                <input v-model="title" type="text" class="form-control" id="recipient-name">
+                <label for="recipient-name" class="col-form-label">Name</label>
+                <input v-model="name" type="text" class="form-control" id="recipient-name">
               </div>
               <div class="form-group">
                 <label for="recipient-name" class="col-form-label">Description</label>
                 <input v-model="description" type="text" class="form-control" id="recipient-name">
               </div>
               <div class="form-group">
-                <label for="message-text" class="col-form-label">Text</label>
-                <textarea v-model="text" class="form-control" id="message-text"></textarea>
+                <label for="recipient-name" class="col-form-label">Hutang</label>
+                <input v-model="hutang" type="text" class="form-control" id="recipient-name">
               </div>
             </form>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button @click="createBlog" type="button" class="btn btn-primary">Create Blog</button>
+            <button @click="createBlog" type="button" class="btn btn-primary">Add Hutangers</button>
             <icon v-show="loading" name="sync" spin></icon>
           </div>
         </div>
@@ -48,7 +48,8 @@ export default {
     return {
       name: '',
       description: '',
-      text: '',
+      hutang: '',
+      userId: localStorage.getItem('id'),
       file: null,
       formData: new FormData()
     }
@@ -60,13 +61,14 @@ export default {
     },
     createBlog () {
       this.formData.set('image', this.file)
-      this.formData.set('title', this.title)
+      this.formData.set('name', this.name)
       this.formData.set('description', this.description)
-      this.formData.set('text', this.text)
+      this.formData.set('hutang', this.hutang)
+      this.formData.set('userId', this.userId)
       this.createTodo(this.formData)
     },
     ...mapActions([
-      'writeBlog'
+      'createTodo'
     ])
   },
   computed: {

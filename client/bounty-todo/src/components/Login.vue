@@ -25,12 +25,14 @@ export default {
       axios.post(`${this.url}/loginfb`, {'token': fbtoken})
         .then(response => {
           console.log(response.data)
+          let id = response.data.id
           let fbtoken = response.data.apptoken
           let email = response.data.email
           let name = response.data.name
           let profileUrl = response.data.profileUrl
           localStorage.setItem('token', fbtoken)
           localStorage.setItem('email', email)
+          localStorage.setItem('id', id)
           localStorage.setItem('name', name)
           localStorage.setItem('profileUrl', profileUrl)
           this.$router.push('/todo')

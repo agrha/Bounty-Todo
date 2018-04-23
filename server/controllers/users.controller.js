@@ -20,6 +20,7 @@ class User {
             // console.log('finding',user)
             res.status(200).json({                
               message     : `welcome ${user.username}`,
+              id          : user._id,
               name        : user.username, 
               email       : user.email,
               profileUrl  : user.picture,
@@ -38,6 +39,7 @@ class User {
             jwt.sign({ user }, 'secret key', (err, token) => {
               res.status(200).json({                
                 message     : `new user ${user.username}`,
+                id          : user._id,
                 name        : user.username, 
                 email       : user.email,
                 profileUrl  : user.picture,

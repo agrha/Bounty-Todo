@@ -1,45 +1,26 @@
 <template>
-  <div class="col-xs-12 col-sm-6 col-md-4">
+  <div class="col-md-4">
     <div class="image-flip" ontouchstart="this.classList.toggle('hover');">
       <div class="mainflip">
         <div class="frontside">
             <div class="card">
               <div class="card-body text-center">
-                <p><img class=" img-fluid" src="https://sunlimetech.com/portfolio/boot4menu/assets/imgs/team/img_01.png" alt="card image"></p>
-                <h4 class="card-title">Sunlimetech</h4>
-                <p class="card-text">This is basic card with image on top, title, description and button.</p>
-                <a href="#" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i></a>
+                <p><img class=" img-fluid" :src="todo.image"></p>
+                <h4 class="card-title">{{todo.name}}</h4>
+                <button v-if="todo.status===false" class="btn btn-outline-danger my-2 my-sm-0"><strong>Masih Ngutang</strong></button>
+                <button v-if="todo.status===true" class="btn btn-outline-success my-2 my-sm-0"><strong>Lunas</strong></button>
               </div>
             </div>
         </div>
-        <div class="backside">
+        <div class="backside col md-4">
           <div class="card">
-            <div class="card-body text-center mt-4">
-              <h4 class="card-title">Sunlimetech</h4>
-              <p class="card-text">This is basic card with image on top, title, description and button.This is basic card with image on top, title, description and button.This is basic card with image on top, title, description and button.</p>
-              <ul class="list-inline">
-                <li class="list-inline-item">
-                  <a class="social-icon text-xs-center" target="_blank" href="#">
-                      <i class="fa fa-facebook"></i>
-                  </a>
-                </li>
-                <li class="list-inline-item">
-                  <a class="social-icon text-xs-center" target="_blank" href="#">
-                      <i class="fa fa-twitter"></i>
-                  </a>
-                </li>
-                <li class="list-inline-item">
-                  <a class="social-icon text-xs-center" target="_blank" href="#">
-                      <i class="fa fa-skype"></i>
-                  </a>
-                </li>
-                <li class="list-inline-item">
-                  <a class="social-icon text-xs-center" target="_blank" href="#">
-                      <i class="fa fa-google"></i>
-                  </a>
-                </li>
-              </ul>
-            </div>
+              <h4 class="card-title">Rincian</h4>
+              <label><strong>Jenis Hutang</strong></label>
+              <p class="card-text">{{todo.description}}</p>
+              <label><strong>Jumlah Hutang</strong></label>
+              <p class="card-text">{{todo.hutang | rupiah}}</p>
+              <button @click="completeTodo(todo._id)" class="btn btn-outline-success my-2 my-sm-0"><strong>Lunas?</strong></button>
+              <button @click="deleteTodo(todo._id)" class="btn btn-outline-success my-2 my-sm-0"><strong>Delete</strong></button>
           </div>
         </div>
       </div>
@@ -50,8 +31,17 @@
 <script>
 import {mapActions} from 'vuex'
 export default {
-  ...mapActions([
-    'deleteTodo'
-  ])
+  props: ['todo'],
+  methods: {
+    ...mapActions([
+      'deleteTodo',
+      'completeTodo'
+    ])
+  },
+  filters: {
+    rupiah: function (value) {
+      return 'Rp. ' + value.toLocaleString()
+    }
+  }
 }
 </script>

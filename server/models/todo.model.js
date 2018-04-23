@@ -5,9 +5,12 @@ const todoSchema = new Schema({
   name:String,
   description:String,
   hutang:Number,
-  status:String,
+  status:Boolean,
   image:String,
-  userId:{type:Schema.Types.ObjectId,ref:'User'}
+  userId: {
+    type:Schema.Types.ObjectId, 
+    ref: 'User'
+  }
 })
 
 module.exports = mongoose.model('Todo',todoSchema)

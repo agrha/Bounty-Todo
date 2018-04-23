@@ -1,20 +1,22 @@
 <template>
   <section id="todo-group" class="pb-5">
+    <NavBar></NavBar>
     <div class="container">
+      <h1 style="color:white;margin-bottom:50px"> <strong>Todo Penagih Hutang</strong> </h1>
       <div class="row">
-        <h1>{{todos}}</h1>
-        <Todo></Todo>
+        <Todo v-for="(todo,index) in todos" :key="index" :todo="todo"></Todo>
       </div>
     </div>
   </section>
 </template>
 
 <script>
-import {mapGetters,mapActions} from 'vuex'
+import NavBar from '@/components/NavBar'
+import {mapGetters, mapActions} from 'vuex'
 import Todo from '@/components/Todo'
 export default {
   components: {
-    Todo
+    Todo, NavBar
   },
   computed: {
     ...mapGetters([
@@ -33,8 +35,8 @@ export default {
 </script>
 
 <style>
-#team {
-    background: #eee !important;
+#todo-group {
+    background:black !important;
 }
 
 .btn-primary:hover,
@@ -60,11 +62,6 @@ section .section-title {
     color: #007b5e;
     margin-bottom: 50px;
     text-transform: uppercase;
-}
-
-#team .card {
-    border: none;
-    background: #ffffff;
 }
 
 .image-flip:hover .backside,
@@ -160,4 +157,3 @@ section .section-title {
     border-radius: 50%;
 }
 </style>
-

@@ -9,7 +9,8 @@ Vue.use(Vuex)
 const state = {
   todos: [],
   loading: false,
-  loadingComplete: false
+  loadingComplete: false,
+  userId: ''
 }
 
 const getters = {
@@ -21,16 +22,13 @@ const getters = {
   },
   loading: state => {
     return state.loading
-  },
-  loadingComplete: state => {
-    return state.loadingComplete
   }
 }
 
 const actions = {
   fetchData ({commit}) {
-    // console.log('masuk fetch')
-    axios.get(`${url}/todos`)
+    state.userId = localStorage.getItem('id')
+    axios.get(`${url}/todos/${state.userId}`)
       .then(response => {
         console.log('hasil fetch', response.data.todo)
         commit('fetchData', response.data.todo)
@@ -39,28 +37,25 @@ const actions = {
         console.log('fetch failed', err.message)
       })
   },
-  editBlog ({commit}, payload) {
-    state.loadingComplete = true
-    axios.put(`${url}/blogs/${payload.id}`, payload.formData, {headers: {token: localStorage.getItem('token')}})
+  completeTodo ({commit}, payload) {
+    axios.put(`${url}/todos/${payload}`, {}, {headers: {token: localStorage.getItem('token')}})
       .then(response => {
         console.log('edit', response.data.savedData)
-        state.loadingComplete = false
-        commit('editData', response.data.savedData)
+        commit('complete', response.data.savedData)
       })
       .catch(err => {
         console.log('error edit', err)
-        state.loadingComplete = false
       })
   },
   createTodo ({commit}, obj) {
+    obj.userId = state.id
     state.loading = true
-    console.log('=============> masuk storenya pak')
-    axios.post(`${url}/blogs`, obj, {headers: {token: localStorage.getItem('token')}})
+    axios.post(`${url}/todos`, obj, {headers: {token: localStorage.getItem('token')}})
       .then(response => {
         console.log(response.data.data)
         commit('addData', response.data.data)
         swal(
-          'Create Blog Success',
+          'Create Todo Success',
           `${response.data.data.title} is created`,
           'success'
         )
@@ -70,7 +65,7 @@ const actions = {
         console.log(err.message)
         swal({
           type: 'error',
-          title: 'Create Blog Failed',
+          title: 'Create Todo Failed',
           text: err.message
         })
         state.loading = false
@@ -81,7 +76,7 @@ const actions = {
       .then(response => {
         swal({
           title: 'Are you sure?',
-          text: 'You will delete this article',
+          text: 'You will delete this todo?',
           type: 'warning',
           showCancelButton: true,
           confirmButtonColor: '#3085d6',
@@ -90,8 +85,8 @@ const actions = {
         }).then(result => {
           if (result.value) {
             swal(
-              'Delete Blog Success',
-              `${response.data.todo.title} is deleted`,
+              'Delete Todo Success',
+              `${response.data.todo.name} is deleted`,
               'success'
             )
             commit('deleteData', obj)
@@ -117,24 +112,21 @@ const actions = {
 
 const mutations = {
   fetchData (state, payload) {
-    state.articles = payload
-  },
-  fetchOneData (state, payload) {
-    state.oneArticle = payload
+    state.todos = payload
   },
   addData (state, payload) {
-    state.articles.push(payload)
+    state.todos.push(payload)
   },
-  editData (state, payload) {
-    console.log(payload)
-    let index = state.articles.findIndex(blog => blog._id === payload.id)
-    console.log(index)
-    state.articles.splice(index, 1, payload)
+  complete (state, payload) {
+    // console.log(payload)
+    let index = state.todos.findIndex(todo => todo._id === payload._id)
+    // console.log(index)
+    state.todos.splice(index, 1, payload)
   },
   deleteData (state, payload) {
-    state.articles.map((data, index) => {
+    state.todos.map((data, index) => {
       if (payload === data._id) {
-        state.articles.splice(index, 1)
+        state.todos.splice(index, 1)
       }
     })
   }
