@@ -13,7 +13,14 @@ var users = require('./routes/users');
 var todos = require('./routes/todo')
 
 var app = express();
-mongoose.connect('mongodb://localhost/todo-ngulang')
+mongoose.connect('mongodb://agrha:daun10lembar@ds247698.mlab.com:47698/bounty-todo', (err) => {
+  if (!err) {
+    console.log('connect to Database');
+  }
+  else {
+    throw new Error(err)
+  }
+});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
